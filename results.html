@@ -9,7 +9,6 @@
 <body>
 <div class="wrap">
   <div class="logo"><img src="assets/logo.png" alt="Логотип конкурса"></div>
-
   <h1>Сводная таблица результатов</h1>
 
   <div class="hint">
@@ -18,18 +17,22 @@
     и нажмите «Пересчитать результаты».
   </div>
 
-  <div class="bonus-box" id="bonusBox">
-    <div class="sec-title">Дополнительные баллы</div>
-    <div id="bonusRows"></div>
-    <button class="btn" id="recalcBtn" type="button">Пересчитать результаты</button>
-  </div>
-
-  <div class="table-wrap">
+  <!-- Таблица теперь сверху -->
+  <div class="table-wrap" style="margin-bottom: 20px;">
     <table>
       <thead id="thead"></thead>
       <tbody id="tbody"></tbody>
     </table>
   </div>
+
+  <!-- Блок с бонусами теперь снизу -->
+  <div class="bonus-box" id="bonusBox">
+    <div class="sec-title">Дополнительные баллы</div>
+    <div id="bonusRows"></div>
+    <button class="btn" id="recalcBtn" type="button" style="margin-top: 15px;">Применить бонусы и пересчитать</button>
+  </div>
+  
+  <!-- Сюда JS вставит мелкую кнопку "Очистить всё" -->
 </div>
 
 <script src="assets/data.js"></script>
