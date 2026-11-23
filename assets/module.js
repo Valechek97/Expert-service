@@ -35,15 +35,15 @@
 
       const scoredCount = Object.keys(scoredData).length;
       
-      // 1. БЛОК ВВОДА (если оценены еще не все)
+      // 1. БЛОК ВВОДА
       if (scoredCount < 19) {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
           <div class="step-info">Оценено ${scoredCount} из 19</div>
           
-          <label style="font-size:13px; color:var(--muted); margin-bottom:4px; display:block;">Шифр участника:</label>
-          <input type="text" id="codeInput" placeholder="Например: У-05" autocomplete="off" style="text-transform: uppercase; margin-bottom:12px;">
+          <label style="font-size:13px; color:var(--muted); margin-bottom:4px; display:block;">Номер участника (только цифры):</label>
+          <input type="text" id="codeInput" placeholder="Например: 5" autocomplete="off" inputmode="numeric" style="margin-bottom:12px;">
           
           <label style="font-size:13px; color:var(--muted); margin-bottom:4px; display:block;">Количество баллов (0–100):</label>
           <input type="number" id="scoreInput" min="0" max="100" step="0.01" placeholder="0–100" inputmode="decimal">
@@ -59,14 +59,20 @@
 
         btn.addEventListener('click', async () => {
           err.textContent = '';
-          let code = codeInput.value.trim().toUpperCase().replace(/\s+/g, '');
           
-          if (/^\d+$/.test(code)) {
-            code = 'У-' + code.padStart(2, '0');
+          // Очищаем ввод от всего, кроме цифр
+          let rawCode = codeInput.value.trim().replace(/[^0-9]/g, '');
+          
+          if (!rawCode) {
+            err.textContent = 'Введите номер участника.';
+            return;
           }
 
+          // Превращаем "5" в "У-05", "15" в "У-15"
+          let code = 'У-' + rawCode.padStart(2, '0');
+
           if (!ALL_PARTICIPANTS.includes(code)) {
-            err.textContent = 'Неверный шифр. Доступны: У-01 ... У-19.';
+            err.textContent = 'Неверный номер. Доступны номера от 1 до 19.';
             return;
           }
 
@@ -88,7 +94,7 @@
 
           try {
             await saveScore(moduleId, code, val);
-            await renderInterface(); // Перерисовываем (обновит и рейтинг)
+            await renderInterface(); // Перерисовываем
           } catch (e) {
             err.textContent = 'Ошибка сохранения. Повторите.';
             btn.disabled = false;
@@ -98,16 +104,14 @@
 
         container.appendChild(card);
       } else {
-        // Если все оценены
         container.innerHTML = `<div class="hint" style="text-align:center; color:var(--emerald-600); font-weight:bold; margin-bottom:20px;">Все 19 участников модуля оценены!</div>`;
       }
 
-      // 2. БЛОК РЕЙТИНГА МОДУЛЯ (отображается, если есть хотя бы одна оценка)
+      // 2. БЛОК РЕЙТИНГА МОДУЛЯ
       if (scoredCount > 0) {
         const rankingBox = document.createElement('div');
-        rankingBox.className = 'queue-preview'; // Используем стили от блока с очередью
+        rankingBox.className = 'queue-preview'; 
         
-        // Превращаем объект в массив и сортируем по убыванию баллов
         const ranking = Object.entries(scoredData)
           .map(([code, score]) => ({ code, score }))
           .sort((a, b) => b.score - a.score || a.code.localeCompare(b.code));
