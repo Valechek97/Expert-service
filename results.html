@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Сводные результаты</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="logo"><img src="assets/logo.png" alt="Логотип конкурса"></div>
+
+  <h1>Сводная таблица результатов</h1>
+
+  <div class="hint">
+    Доступ только для главного эксперта. Баллы модулей от 0 до 100.
+    При необходимости добавьте дополнительные баллы из выпадающих списков
+    и нажмите «Пересчитать результаты».
+  </div>
+
+  <div class="bonus-box" id="bonusBox">
+    <div class="sec-title">Дополнительные баллы</div>
+    <div id="bonusRows"></div>
+    <button class="btn" id="recalcBtn" type="button">Пересчитать результаты</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead id="thead"></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/firebase-config.js"></script>
+<script type="module" src="assets/store.js"></script>
+<script src="assets/results.js"></script>
+</body>
+</html>
