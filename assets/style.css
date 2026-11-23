@@ -15,31 +15,48 @@
   --danger:#dc2626;
 }
 
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
+*{
+  box-sizing: border-box; /* Защита от раздувания размеров */
+  -webkit-tap-highlight-color: transparent; /* Убирает синюю подсветку на телефонах */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* Запрещает горизонтальный скролл всей страницы */
+}
 
 body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background-color: var(--bg); /* Белый фон */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg);
   color: var(--text);
-  min-height:100vh;
-  padding: 10px; /* Компактные отступы вокруг */
+  min-height: 100vh;
+  padding: 10px;
   font-size: 15px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Контейнер поуже для мобильных */
+/* Контейнер жестко центрирован и не шире 540px */
 .wrap {
-  max-width: 540px; 
+  width: 100%;
+  max-width: 540px;
   margin: 0 auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Логотип без обводки */
+/* Логотип */
 .logo {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
+  flex-shrink: 0;
 }
 .logo img {
   max-height: 80px;
@@ -53,6 +70,7 @@ h1 {
   margin: 0 0 10px;
   color: var(--emerald-900);
   text-align: center;
+  word-wrap: break-word; /* Перенос длинных слов */
 }
 h1 .num {
   color: var(--emerald-600); 
@@ -66,9 +84,9 @@ h1 .num {
   border-radius: 12px;
   padding: 12px;
   font-size: 13px;
-  line-height: 1.4;
   color: var(--emerald-700);
   margin: 0 0 16px;
+  word-wrap: break-word;
 }
 
 /* Карточка ввода */
@@ -79,8 +97,10 @@ h1 .num {
   border-radius: 12px;
   padding: 14px;
   margin-bottom: 16px;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
 
 .card .step-info {
@@ -91,7 +111,7 @@ h1 .num {
   margin-bottom: 12px;
 }
 
-/* Общие стили для полей ввода в карточке */
+/* Общие стили для полей ввода */
 .card input[type=number],
 .card input[type=text] {
   width: 100%;
@@ -104,7 +124,8 @@ h1 .num {
   outline: none;
   font-weight: 600;
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .card input[type=number]:focus,
@@ -116,17 +137,18 @@ h1 .num {
 
 .card input::placeholder {
   color: var(--emerald-500);
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 /* Текст ошибки */
 .card .err {
   color: var(--danger);
   font-size: 12px;
-  margin-top: 2px;
+  margin-top: -4px;
   margin-bottom: 8px;
   min-height: 16px;
   text-align: center;
+  font-weight: 500;
 }
 
 /* Кнопки */
@@ -141,6 +163,7 @@ h1 .num {
   font-size: 16px;
   font-weight: 600;
   transition: background 0.2s;
+  display: block;
 }
 .btn:hover {
   background: var(--emerald-700);
@@ -149,7 +172,7 @@ h1 .num {
   transform: translateY(1px);
 }
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
   background: var(--emerald-500);
 }
@@ -166,33 +189,68 @@ h1 .num {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
+  width: max-content;
+  flex-shrink: 0;
 }
 .btn-small:hover {
   background-color: #fef2f2;
   border-color: #dc2626;
 }
 
+/* Блок рейтинга (список лучших) */
+.queue-preview {
+  background: #ffffff;
+  border: 1px solid var(--emerald-100);
+  box-shadow: 0 2px 6px rgba(4, 120, 87, 0.04);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 20px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.queue-preview h3 {
+  font-size: 15px;
+  color: var(--emerald-900);
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+.queue-list {
+  font-size: 14px;
+  color: var(--emerald-700);
+  line-height: 1.5;
+  font-weight: 500;
+  word-break: break-word;
+}
+
 /* Таблица результатов */
 .table-wrap {
+  width: 100%;
   overflow-x: auto;
   border: 1px solid var(--emerald-100);
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(4, 120, 87, 0.04);
   -webkit-overflow-scrolling: touch;
   margin-bottom: 20px;
+  flex-shrink: 0;
 }
+
 table {
   border-collapse: collapse;
   width: 100%;
   font-size: 13px;
-  min-width: 560px;
+  min-width: 600px; /* Заставляет таблицу скроллиться на телефоне, а не сжиматься */
   background: #ffffff;
 }
+
 th, td {
   padding: 10px 6px;
   text-align: center;
   border-bottom: 1px solid var(--emerald-100);
+  white-space: nowrap; /* Запрещает перенос строк внутри ячеек */
 }
+
 th {
   background: var(--emerald-50);
   color: var(--emerald-900);
@@ -200,12 +258,13 @@ th {
   position: sticky;
   top: 0;
 }
+
 td.code {
   font-weight: 700;
   color: var(--emerald-700);
 }
 
-/* Подсветка призовых мест в таблице */
+/* Подсветка призовых мест */
 tr.gold td { background: rgba(180, 83, 9, 0.08); }
 tr.silver td { background: rgba(100, 116, 139, 0.08); }
 tr.bronze td { background: rgba(154, 52, 18, 0.08); }
@@ -227,19 +286,25 @@ tr.bronze td:first-child::before { content: "🥉 "; }
   border-radius: 12px;
   padding: 14px;
   margin-bottom: 16px;
+  width: 100%;
+  flex-shrink: 0;
 }
+
 .bonus-row {
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 8px 0;
+  width: 100%;
 }
+
 .bonus-row label {
   min-width: 50px;
   color: var(--emerald-700);
   font-weight: 700;
   font-size: 14px;
 }
+
 .bonus-row select {
   flex: 1;
   padding: 10px;
@@ -249,10 +314,13 @@ tr.bronze td:first-child::before { content: "🥉 "; }
   color: var(--emerald-900);
   font-size: 14px;
   outline: none;
+  max-width: 100%;
 }
+
 .bonus-row select:focus {
   border-color: var(--emerald-500);
 }
+
 .bonus-row .pts {
   color: var(--emerald-700);
   font-weight: 800;
@@ -260,6 +328,7 @@ tr.bronze td:first-child::before { content: "🥉 "; }
   text-align: right;
   font-size: 14px;
 }
+
 .sec-title {
   color: var(--emerald-900);
   font-size: 16px;
@@ -267,32 +336,9 @@ tr.bronze td:first-child::before { content: "🥉 "; }
   margin: 0 0 10px;
 }
 
-/* Блок текущего рейтинга модуля */
-.queue-preview {
-  background: #ffffff;
-  border: 1px solid var(--emerald-100);
-  box-shadow: 0 2px 6px rgba(4, 120, 87, 0.04);
-  border-radius: 12px;
-  padding: 14px;
-  margin-top: 20px;
-}
-.queue-preview h3 {
-  font-size: 15px;
-  color: var(--emerald-900);
-  margin: 0 0 12px;
-  text-align: center;
-}
-.queue-list {
-  font-size: 13px;
-  color: var(--emerald-700);
-  line-height: 1.6;
-  font-weight: 500;
-}
-
-/* Адаптация для очень узких экранов */
+/* Медиа-запросы для очень маленьких экранов (iPhone SE и т.д.) */
 @media (max-width: 380px) {
   body { padding: 8px; }
-  .wrap { max-width: 100%; }
   h1 { font-size: 16px; }
   .hint { font-size: 12px; padding: 10px; }
   .card { padding: 12px; }
@@ -305,4 +351,7 @@ tr.bronze td:first-child::before { content: "🥉 "; }
     padding: 12px;
     font-size: 15px;
   }
+  .bonus-row { flex-wrap: wrap; }
+  .bonus-row label { width: 40px; min-width: 40px; }
+  .bonus-row select { width: calc(100% - 50px); flex: none; }
 }
