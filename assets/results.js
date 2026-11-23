@@ -28,14 +28,15 @@
         <span class="pts"></span>
       `;
       const sel = row.querySelector('select');
+      // Восстановление выбранного значения
       const chosen = Object.keys(bonuses).find(p => bonuses[p] === pts);
       if (chosen) sel.value = chosen;
 
+      // Сохраняем выбор в объект bonuses при изменении
       sel.addEventListener('change', () => {
         Object.keys(bonuses).forEach(p => { if (bonuses[p] === pts) delete bonuses[p]; });
         if (sel.value) bonuses[sel.value] = pts;
         saveBonus();
-        renderTable();
       });
 
       box.appendChild(row);
@@ -45,6 +46,7 @@
   function renderTable(){
     const moduleIds = Object.keys(MODULES).map(Number).sort((a,b)=>a-b);
 
+    // Шапка таблицы
     const thead = document.getElementById('thead');
     thead.innerHTML = `
       <tr>
@@ -55,6 +57,7 @@
         <th>Итог</th>
       </tr>`;
 
+    // Данные
     const rows = ALL_PARTICIPANTS.map(code => {
       const perModule = moduleIds.map(id => {
         const v = scoresAll[id]?.[code];
@@ -66,8 +69,10 @@
       return { code, perModule, bonus, total };
     });
 
+    // Сортировка
     rows.sort((a,b)=> b.total - a.total || a.code.localeCompare(b.code));
 
+    // Рендер строк
     const tbody = document.getElementById('tbody');
     tbody.innerHTML = rows.map((r, idx) => {
       const place = idx + 1;
@@ -86,12 +91,25 @@
     }).join('');
   }
 
+  // Загрузка актуальных данных из Firebase и отрисовка
   async function refresh(){
     scoresAll = await loadAllScores();
     renderTable();
   }
 
-  document.getElementById('recalcBtn').addEventListener('click', refresh);
+  // Очистка всех результатов
+  async function clearAllData() {
+    if (!confirm("Вы уверены, что хотите удалить ВСЕ результаты? Это действие нельзя отменить.")) return;
+    try {
+      await clearAllScores(); // вызов из store.js
+      localStorage.removeItem(BONUS_LS_KEY); // сбрасываем бонусы
+      bonuses = {};
+      alert("Все результаты удалены.");
+      location.reload();
+    } catch (e) {
+      alert("Ошибка при удалении.");
+    }
+  }
 
   async function waitForStore() {
     while (!window.storeReady) {
@@ -104,5 +122,17 @@
     loadBonus();
     buildBonusRows();
     await refresh();
+
+    // Кнопка пересчета
+    document.getElementById('recalcBtn').addEventListener('click', async () => {
+      await refresh();
+    });
+
+    // Мелкая кнопка очистки
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'btn-small';
+    clearBtn.textContent = 'Очистить все результаты';
+    clearBtn.addEventListener('click', clearAllData);
+    document.querySelector('.wrap').appendChild(clearBtn);
   })();
 })();
