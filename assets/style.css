@@ -180,3 +180,22 @@ tr.bronze td:first-child::before{content:"🥉 "; }
   color: var(--emerald-900);
   margin: 0 0 10px;
 }
+
+.card input[type=text]{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid var(--emerald-100);
+  background:var(--emerald-50);
+  color:var(--emerald-900);
+  font-size:18px;
+  outline:none;
+  font-weight:600;
+  text-align: center;
+}
+.card input[type=text]:focus{
+  border-color:var(--emerald-500);
+  background:#ffffff;
+  box-shadow: 0 0 0 3px var(--emerald-100);
+}
+.card input[type=text]::placeholder { color: var(--emerald-500); opacity: 0.5; }
