@@ -355,3 +355,20 @@ tr.bronze td:first-child::before { content: "🥉 "; }
   .bonus-row label { width: 40px; min-width: 40px; }
   .bonus-row select { width: calc(100% - 50px); flex: none; }
 }
+
+/* Подзаголовок конкурса */
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: var(--emerald-700);
+  font-weight: 600;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 380px) {
+  .subtitle {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+}
