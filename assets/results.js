@@ -28,11 +28,9 @@
         <span class="pts"></span>
       `;
       const sel = row.querySelector('select');
-      // Восстановление выбранного значения
       const chosen = Object.keys(bonuses).find(p => bonuses[p] === pts);
       if (chosen) sel.value = chosen;
 
-      // Сохраняем выбор в объект bonuses при изменении
       sel.addEventListener('change', () => {
         Object.keys(bonuses).forEach(p => { if (bonuses[p] === pts) delete bonuses[p]; });
         if (sel.value) bonuses[sel.value] = pts;
@@ -46,7 +44,6 @@
   function renderTable(){
     const moduleIds = Object.keys(MODULES).map(Number).sort((a,b)=>a-b);
 
-    // Шапка таблицы
     const thead = document.getElementById('thead');
     thead.innerHTML = `
       <tr>
@@ -57,7 +54,6 @@
         <th>Итог</th>
       </tr>`;
 
-    // Данные
     const rows = ALL_PARTICIPANTS.map(code => {
       const perModule = moduleIds.map(id => {
         const v = scoresAll[id]?.[code];
@@ -69,10 +65,8 @@
       return { code, perModule, bonus, total };
     });
 
-    // Сортировка
     rows.sort((a,b)=> b.total - a.total || a.code.localeCompare(b.code));
 
-    // Рендер строк
     const tbody = document.getElementById('tbody');
     tbody.innerHTML = rows.map((r, idx) => {
       const place = idx + 1;
@@ -91,18 +85,16 @@
     }).join('');
   }
 
-  // Загрузка актуальных данных из Firebase и отрисовка
   async function refresh(){
     scoresAll = await loadAllScores();
     renderTable();
   }
 
-  // Очистка всех результатов
   async function clearAllData() {
     if (!confirm("Вы уверены, что хотите удалить ВСЕ результаты? Это действие нельзя отменить.")) return;
     try {
-      await clearAllScores(); // вызов из store.js
-      localStorage.removeItem(BONUS_LS_KEY); // сбрасываем бонусы
+      await clearAllScores();
+      localStorage.removeItem(BONUS_LS_KEY);
       bonuses = {};
       alert("Все результаты удалены.");
       location.reload();
@@ -123,9 +115,58 @@
     buildBonusRows();
     await refresh();
 
-    // Кнопка пересчета
+    // Кнопка пересчета бонусов
     document.getElementById('recalcBtn').addEventListener('click', async () => {
       await refresh();
+    });
+
+    // ЛОГИКА БЛОКА КОРРЕКТИРОВКИ
+    document.getElementById('corrSubmitBtn').addEventListener('click', async () => {
+      const errBox = document.getElementById('corrErr');
+      errBox.textContent = '';
+
+      const modId = document.getElementById('corrModule').value;
+      let rawCode = document.getElementById('corrParticipant').value.trim();
+      const scoreVal = Number(document.getElementById('corrScore').value);
+
+      if (!rawCode) {
+        errBox.textContent = 'Введите шифр участника.';
+        return;
+      }
+
+      // Очищаем ввод от лишнего и приводим к формату У-05
+      rawCode = rawCode.replace(/[^0-9]/g, '');
+      const code = 'У-' + rawCode.padStart(2, '0');
+
+      if (!ALL_PARTICIPANTS.includes(code)) {
+        errBox.textContent = 'Неверный шифр. Доступны номера от 1 до 19.';
+        return;
+      }
+
+      if (isNaN(scoreVal) || scoreVal < 0 || scoreVal > 100) {
+        errBox.textContent = 'Введите баллы от 0 до 100.';
+        return;
+      }
+
+      const btn = document.getElementById('corrSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Сохранение...';
+
+      try {
+        // Перезаписываем балл в Firebase
+        await saveScore(modId, code, scoreVal);
+        await refresh(); // Обновляем таблицу
+        
+        // Очищаем поля
+        document.getElementById('corrParticipant').value = '';
+        document.getElementById('corrScore').value = '';
+        alert(`Оценка участника ${code} за модуль ${modId} успешно изменена на ${scoreVal} б.`);
+      } catch (e) {
+        errBox.textContent = 'Ошибка сохранения. Повторите.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Исправить';
+      }
     });
 
     // Мелкая кнопка очистки
