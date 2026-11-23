@@ -46,3 +46,15 @@ window.getScore = getScore;
 
 // Сигнал о готовности базы данных
 window.storeReady = true;
+
+// Функция полной очистки базы
+async function clearAllScores() {
+  try {
+    await set(ref(db, 'scores'), null);
+    console.log("Все результаты удалены из базы.");
+  } catch (error) {
+    console.error("Ошибка при очистке базы:", error);
+    throw error;
+  }
+}
+window.clearAllScores = clearAllScores;
