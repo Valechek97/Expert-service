@@ -1,151 +1,157 @@
-
-
-  margin:0 0 16px;
+:root{
+  --emerald-950:#022c22;
+  --emerald-900:#064e3b;
+  --emerald-700:#047857;
+  --emerald-600:#059669;
+  --emerald-500:#10b981;
+  --emerald-100:#d1fae5;
+  --emerald-50:#ecfdf5;
+  --text:#064e3b;
+  --muted:#047857;
+  --bg:#ffffff;
+  --gold:#b45309;
+  --silver:#64748b;
+  --bronze:#9a3412;
+  --danger:#dc2626;
 }
 
-.card{
-  background:#ffffff;
-  border:1px solid var(--emerald-100);
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background-color: var(--bg); /* Белый фон */
+  color: var(--text);
+  min-height:100vh;
+  padding: 10px; /* Компактные отступы вокруг */
+  font-size: 15px;
+}
+
+/* Контейнер поуже для мобильных */
+.wrap {
+  max-width: 540px; 
+  margin: 0 auto;
+}
+
+/* Логотип без обводки */
+.logo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.logo img {
+  max-height: 80px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+h1 {
+  font-size: 18px;
+  line-height: 1.3;
+  margin: 0 0 10px;
+  color: var(--emerald-900);
+  text-align: center;
+}
+h1 .num {
+  color: var(--emerald-600); 
+  display: block; 
+  margin-bottom: 4px;
+}
+
+.hint {
+  background: var(--emerald-50);
+  border: 1px solid var(--emerald-100);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--emerald-700);
+  margin: 0 0 16px;
+}
+
+/* Карточка ввода */
+.card {
+  background: #ffffff;
+  border: 1px solid var(--emerald-100);
   box-shadow: 0 2px 6px rgba(4, 120, 87, 0.04);
-  border-radius:12px;
-  padding:14px;
-  margin-bottom:12px;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
 }
 
-.card .code{
-  font-size:17px;
-  font-weight:700;
-  margin-bottom:8px;
-  color:var(--emerald-700);
+.card .step-info {
+  font-size: 14px;
+  color: var(--emerald-700);
+  font-weight: 600;
   text-align: center;
+  margin-bottom: 12px;
 }
 
-.card input[type=number]{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid var(--emerald-100);
-  background:var(--emerald-50);
-  color:var(--emerald-900);
-  font-size:18px; /* Крупный шрифт для удобства ввода на телефоне */
-  outline:none;
-  font-weight:600;
-  text-align: center; /* Цифры по центру */
+/* Общие стили для полей ввода в карточке */
+.card input[type=number],
+.card input[type=text] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--emerald-100);
+  background: var(--emerald-50);
+  color: var(--emerald-900);
+  font-size: 18px;
+  outline: none;
+  font-weight: 600;
+  text-align: center;
   margin-bottom: 8px;
 }
-.card input:focus{
-  border-color:var(--emerald-500);
-  background:#ffffff;
+
+.card input[type=number]:focus,
+.card input[type=text]:focus {
+  border-color: var(--emerald-500);
+  background: #ffffff;
   box-shadow: 0 0 0 3px var(--emerald-100);
 }
-.card input::placeholder { color: var(--emerald-500); opacity: 0.5; }
 
-.card .err{color:var(--danger);font-size:12px;margin-top:2px;min-height:16px;text-align:center;}
+.card input::placeholder {
+  color: var(--emerald-500);
+  opacity: 0.5;
+}
 
-.btn{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:0;
-  cursor:pointer;
-  background:var(--emerald-600);
-  color:#ffffff;
-  font-size:16px;
-  font-weight:600;
+/* Текст ошибки */
+.card .err {
+  color: var(--danger);
+  font-size: 12px;
+  margin-top: 2px;
+  margin-bottom: 8px;
+  min-height: 16px;
+  text-align: center;
+}
+
+/* Кнопки */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 0;
+  cursor: pointer;
+  background: var(--emerald-600);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
   transition: background 0.2s;
 }
-.btn:hover { background:var(--emerald-700); }
-.btn:active{transform:translateY(1px)}
-.btn:disabled{opacity:.5;cursor:not-allowed; background:var(--emerald-500);}
-
-.done{color:var(--emerald-600);font-size:12px;margin-top:8px;font-weight:500;text-align:center;}
-
-/* Таблица результатов */
-.table-wrap{
-  overflow-x:auto;
-  border:1px solid var(--emerald-100);
-  border-radius:12px;
-  box-shadow: 0 2px 6px rgba(4, 120, 87, 0.04);
-  -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
+.btn:hover {
+  background: var(--emerald-700);
 }
-table{border-collapse:collapse;width:100%;font-size:13px;min-width:560px;background:#ffffff;}
-th,td{padding:8px 4px;text-align:center;border-bottom:1px solid var(--emerald-100);}
-th{background:var(--emerald-50);color:var(--emerald-900);font-weight:700;position:sticky;top:0;}
-td.code{font-weight:700;color:var(--emerald-700);}
-
-tr.gold td{background:rgba(180, 83, 9, 0.08);}
-tr.silver td{background:rgba(100, 116, 139, 0.08);}
-tr.bronze td{background:rgba(154, 52, 18, 0.08);}
-
-tr.gold td:first-child::before{content:"🥇 "; }
-tr.silver td:first-child::before{content:"🥈 "; }
-tr.bronze td:first-child::before{content:"🥉 "; }
-
-.total{font-weight:800;color:var(--emerald-900);font-size:14px;}
-
-/* Блок дополнительных баллов */
-.bonus-box{
-  background:var(--emerald-50);
-  border:1px solid var(--emerald-100);
-  border-radius:12px;
-  padding:14px;
-  margin-bottom:16px;
+.btn:active {
+  transform: translateY(1px);
 }
-.bonus-row{display:flex;align-items:center;gap:8px;margin:8px 0;}
-.bonus-row label{min-width:50px;color:var(--emerald-700);font-weight:700;font-size:14px;}
-.bonus-row select{
-  flex:1;
-  padding:10px;
-  border-radius:8px;
-  border:1px solid var(--emerald-100);
-  background:#ffffff;
-  color:var(--emerald-900);
-  font-size:14px;
-  outline:none;
-}
-.bonus-row select:focus { border-color: var(--emerald-500); }
-.bonus-row .pts{color:var(--emerald-700);font-weight:800;min-width:36px;text-align:right;font-size:14px;}
-.sec-title{color:var(--emerald-900);font-size:16px;font-weight:700;margin:0 0 10px;}
-
-/* Дополнительная адаптация для очень узких экранов */
-@media (max-width: 380px){
-  body{padding:8px;}
-  .wrap{max-width: 100%;}
-  h1{font-size:16px;}
-  .hint{font-size:12px; padding:10px;}
-  .card{padding:12px;}
-  .card input[type=number]{padding:10px; font-size:16px;}
-  .btn{padding:12px; font-size:15px;}
-}
-
-/* Пошаговый режим (один участник) */
-.step-info {
-  text-align: center;
-  color: var(--emerald-700);
-  font-size: 14px;
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-.queue-preview {
-  margin-top: 30px;
-  padding: 14px;
-  background: var(--emerald-50);
-  border: 1px dashed var(--emerald-500);
-  border-radius: 12px;
-  text-align: center;
-}
-.queue-preview h3 {
-  font-size: 14px;
-  color: var(--emerald-900);
-  margin: 0 0 10px;
-}
-.queue-list {
-  font-size: 13px;
-  color: var(--emerald-700);
-  line-height: 1.6;
-  font-weight: 500;
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--emerald-500);
 }
 
 /* Мелкая кнопка очистки */
@@ -166,7 +172,102 @@ tr.bronze td:first-child::before{content:"🥉 "; }
   border-color: #dc2626;
 }
 
-/* Стили для блока рейтинга */
+/* Таблица результатов */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--emerald-100);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(4, 120, 87, 0.04);
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 20px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  min-width: 560px;
+  background: #ffffff;
+}
+th, td {
+  padding: 10px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--emerald-100);
+}
+th {
+  background: var(--emerald-50);
+  color: var(--emerald-900);
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+}
+td.code {
+  font-weight: 700;
+  color: var(--emerald-700);
+}
+
+/* Подсветка призовых мест в таблице */
+tr.gold td { background: rgba(180, 83, 9, 0.08); }
+tr.silver td { background: rgba(100, 116, 139, 0.08); }
+tr.bronze td { background: rgba(154, 52, 18, 0.08); }
+
+tr.gold td:first-child::before { content: "🥇 "; }
+tr.silver td:first-child::before { content: "🥈 "; }
+tr.bronze td:first-child::before { content: "🥉 "; }
+
+.total {
+  font-weight: 800;
+  color: var(--emerald-900);
+  font-size: 14px;
+}
+
+/* Блок дополнительных баллов */
+.bonus-box {
+  background: var(--emerald-50);
+  border: 1px solid var(--emerald-100);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+.bonus-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+.bonus-row label {
+  min-width: 50px;
+  color: var(--emerald-700);
+  font-weight: 700;
+  font-size: 14px;
+}
+.bonus-row select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--emerald-100);
+  background: #ffffff;
+  color: var(--emerald-900);
+  font-size: 14px;
+  outline: none;
+}
+.bonus-row select:focus {
+  border-color: var(--emerald-500);
+}
+.bonus-row .pts {
+  color: var(--emerald-700);
+  font-weight: 800;
+  min-width: 36px;
+  text-align: right;
+  font-size: 14px;
+}
+.sec-title {
+  color: var(--emerald-900);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+/* Блок текущего рейтинга модуля */
 .queue-preview {
   background: #ffffff;
   border: 1px solid var(--emerald-100);
@@ -178,24 +279,30 @@ tr.bronze td:first-child::before{content:"🥉 "; }
 .queue-preview h3 {
   font-size: 15px;
   color: var(--emerald-900);
-  margin: 0 0 10px;
-}
-
-.card input[type=text]{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid var(--emerald-100);
-  background:var(--emerald-50);
-  color:var(--emerald-900);
-  font-size:18px;
-  outline:none;
-  font-weight:600;
+  margin: 0 0 12px;
   text-align: center;
 }
-.card input[type=text]:focus{
-  border-color:var(--emerald-500);
-  background:#ffffff;
-  box-shadow: 0 0 0 3px var(--emerald-100);
+.queue-list {
+  font-size: 13px;
+  color: var(--emerald-700);
+  line-height: 1.6;
+  font-weight: 500;
 }
-.card input[type=text]::placeholder { color: var(--emerald-500); opacity: 0.5; }
+
+/* Адаптация для очень узких экранов */
+@media (max-width: 380px) {
+  body { padding: 8px; }
+  .wrap { max-width: 100%; }
+  h1 { font-size: 16px; }
+  .hint { font-size: 12px; padding: 10px; }
+  .card { padding: 12px; }
+  .card input[type=number],
+  .card input[type=text] {
+    padding: 10px;
+    font-size: 16px;
+  }
+  .btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
