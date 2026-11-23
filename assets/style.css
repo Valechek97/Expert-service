@@ -1,3 +1,340 @@
+:root {
+  --emerald-950: #022c22;
+  --emerald-900: #064e3b;
+  --emerald-700: #047857;
+  --emerald-600: #059669;
+  --emerald-500: #10b981;
+  --emerald-100: #d1fae5;
+  --emerald-50: #ecfdf5;
+  --text: #064e3b;
+  --muted: #047857;
+  --bg: #ffffff;
+  --gold: #b45309;
+  --silver: #64748b;
+  --bronze: #9a3412;
+  --danger: #dc2626;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 10px;
+  font-size: 15px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Контейнер страницы */
+.wrap {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Логотип */
+.logo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+.logo img {
+  max-height: 80px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Подзаголовок конкурса */
+.subtitle {
+  text-align: center;
+  font-size: 13px;
+  color: var(--emerald-700);
+  font-weight: 600;
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+
+/* Заголовки */
+h1 {
+  font-size: 18px;
+  line-height: 1.3;
+  margin: 0 0 10px;
+  color: var(--emerald-900);
+  text-align: center;
+  word-wrap: break-word;
+}
+h1 .num {
+  color: var(--emerald-600);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Информационный блок */
+.hint {
+  background: var(--emerald-50);
+  border: 1px solid var(--emerald-100);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  color: var(--emerald-700);
+  margin: 0 0 16px;
+  word-wrap: break-word;
+}
+
+/* Карточка ввода */
+.card {
+  background: #ffffff;
+  border: 1px solid var(--emerald-100);
+  box-shadow: 0 2px 6px rgba(4, 120, 87, 0.04);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.card .step-info {
+  font-size: 14px;
+  color: var(--emerald-700);
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* Поля ввода (текстовые и числовые) */
+.card input[type=number],
+.card input[type=text] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--emerald-100);
+  background: var(--emerald-50);
+  color: var(--emerald-900);
+  font-size: 18px;
+  outline: none;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.card input[type=number]:focus,
+.card input[type=text]:focus {
+  border-color: var(--emerald-500);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px var(--emerald-100);
+}
+.card input::placeholder {
+  color: var(--emerald-500);
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+/* Ошибки */
+.card .err,
+.err {
+  color: var(--danger);
+  font-size: 12px;
+  margin-top: -4px;
+  margin-bottom: 8px;
+  min-height: 16px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Кнопки */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 0;
+  cursor: pointer;
+  background: var(--emerald-600);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background 0.2s;
+  display: block;
+}
+.btn:hover {
+  background: var(--emerald-700);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--emerald-500);
+}
+
+/* Мелкая кнопка очистки */
+.btn-small {
+  display: block;
+  margin: 30px auto 10px;
+  padding: 8px 16px;
+  font-size: 12px;
+  background-color: transparent;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: max-content;
+  flex-shrink: 0;
+}
+.btn-small:hover {
+  background-color: #fef2f2;
+  border-color: #dc2626;
+}
+
+/* Блок рейтинга модуля */
+.queue-preview {
+  background: #ffffff;
+  border: 1px solid var(--emerald-100);
+  box-shadow: 0 2px 6px rgba(4, 120, 87, 0.04);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 20px;
+  width: 100%;
+  flex-shrink: 0;
+}
+.queue-preview h3 {
+  font-size: 15px;
+  color: var(--emerald-900);
+  margin: 0 0 12px;
+  text-align: center;
+}
+.queue-list {
+  font-size: 14px;
+  color: var(--emerald-700);
+  line-height: 1.5;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+/* Таблица результатов */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--emerald-100);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(4, 120, 87, 0.04);
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  min-width: 600px;
+  background: #ffffff;
+}
+th, td {
+  padding: 10px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--emerald-100);
+  white-space: nowrap;
+}
+th {
+  background: var(--emerald-50);
+  color: var(--emerald-900);
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+}
+td.code {
+  font-weight: 700;
+  color: var(--emerald-700);
+}
+
+/* Призовые места */
+tr.gold td { background: rgba(180, 83, 9, 0.08); }
+tr.silver td { background: rgba(100, 116, 139, 0.08); }
+tr.bronze td { background: rgba(154, 52, 18, 0.08); }
+
+tr.gold td:first-child::before { content: "🥇 "; }
+tr.silver td:first-child::before { content: "🥈 "; }
+tr.bronze td:first-child::before { content: "🥉 "; }
+
+.total {
+  font-weight: 800;
+  color: var(--emerald-900);
+  font-size: 14px;
+}
+
+/* Блок дополнительных баллов */
+.bonus-box {
+  background: var(--emerald-50);
+  border: 1px solid var(--emerald-100);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 16px;
+  width: 100%;
+  flex-shrink: 0;
+}
+.bonus-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  width: 100%;
+}
+.bonus-row label {
+  min-width: 50px;
+  color: var(--emerald-700);
+  font-weight: 700;
+  font-size: 14px;
+}
+.bonus-row select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--emerald-100);
+  background: #ffffff;
+  color: var(--emerald-900);
+  font-size: 14px;
+  outline: none;
+  max-width: 100%;
+}
+.bonus-row select:focus {
+  border-color: var(--emerald-500);
+}
+.bonus-row .pts {
+  color: var(--emerald-700);
+  font-weight: 800;
+  min-width: 36px;
+  text-align: right;
+  font-size: 14px;
+}
+.sec-title {
+  color: var(--emerald-900);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
 /* Блок корректировки */
 .correction-box {
   background: #ffffff;
@@ -7,12 +344,12 @@
   margin-top: 20px;
   margin-bottom: 16px;
   box-shadow: 0 2px 6px rgba(180, 83, 9, 0.08);
+  width: 100%;
+  flex-shrink: 0;
 }
-
 .form-group {
   margin-bottom: 12px;
 }
-
 .form-group label {
   display: block;
   font-size: 13px;
@@ -20,7 +357,6 @@
   font-weight: 600;
   margin-bottom: 4px;
 }
-
 .form-group select,
 .form-group input {
   width: 100%;
@@ -32,10 +368,30 @@
   font-size: 15px;
   outline: none;
 }
-
 .form-group select:focus,
 .form-group input:focus {
   border-color: var(--emerald-500);
   background: #ffffff;
   box-shadow: 0 0 0 2px var(--emerald-100);
+}
+
+/* Адаптация под очень узкие экраны */
+@media (max-width: 380px) {
+  body { padding: 8px; }
+  h1 { font-size: 16px; }
+  .subtitle { font-size: 12px; margin-bottom: 10px; }
+  .hint { font-size: 12px; padding: 10px; }
+  .card { padding: 12px; }
+  .card input[type=number],
+  .card input[type=text] {
+    padding: 10px;
+    font-size: 16px;
+  }
+  .btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+  .bonus-row { flex-wrap: wrap; }
+  .bonus-row label { width: 40px; min-width: 40px; }
+  .bonus-row select { width: calc(100% - 50px); flex: none; }
 }
