@@ -395,3 +395,45 @@ tr.bronze td:first-child::before { content: "🥉 "; }
   .bonus-row label { width: 40px; min-width: 40px; }
   .bonus-row select { width: calc(100% - 50px); flex: none; }
 }
+
+/* Блок корректировки */
+.correction-box {
+  background: #ffffff;
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(180, 83, 9, 0.08);
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  color: var(--emerald-700);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.form-group select,
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--emerald-100);
+  background: var(--emerald-50);
+  color: var(--emerald-900);
+  font-size: 15px;
+  outline: none;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+  border-color: var(--emerald-500);
+  background: #ffffff;
+  box-shadow: 0 0 0 2px var(--emerald-100);
+}
