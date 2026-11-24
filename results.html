@@ -33,6 +33,37 @@
     <div id="bonusRows"></div>
     <button class="btn" id="recalcBtn" type="button" style="margin-top: 15px;">Применить бонусы и пересчитать</button>
   </div>
+
+  <!-- Блок корректировки (вставлять после блока bonus-box) -->
+  <div class="correction-box">
+    <div class="sec-title">Корректировка оценок</div>
+    <div class="form-group">
+      <label>Модуль:</label>
+      <select id="corrModule">
+        <option value="1">1. Управление информацией</option>
+        <option value="2">2. Приобретение и регистрация прав</option>
+        <option value="3">3. Защита имущественных прав</option>
+        <option value="4">4. Анализ</option>
+        <option value="5">5. Управление сделками</option>
+        <option value="6">6. Коммерческое сопровождение</option>
+        <option value="7">7. Сопровождение договоров</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label>Шифр участника:</label>
+      <input type="text" id="corrParticipant" placeholder="Например: У-05" style="text-transform: uppercase;">
+    </div>
+    
+    <div class="form-group">
+      <label>Новое количество баллов (0–100):</label>
+      <input type="number" id="corrScore" min="0" max="100" step="0.01" placeholder="0–100">
+    </div>
+    
+    <div class="err" id="corrErr" style="margin-bottom: 8px;"></div>
+    <button class="btn" id="corrSubmitBtn" type="button" style="background-color: #b45309;">Исправить</button>
+  </div>
+  
 </div>
 
 <script src="assets/data.js"></script>
