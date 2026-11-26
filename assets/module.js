@@ -1,12 +1,22 @@
-(function(){
-  const m = location.pathname.match(/module(\d+)\.html$/i);
-  const moduleId = m ? parseInt(m[1], 10) : null;
+(async function(){
+  // Определяем модуль по URL
+  let moduleId = null;
+  for (const id in MODULES) {
+    if (location.pathname.includes(MODULES[id].file)) {
+      moduleId = parseInt(id);
+      break;
+    }
+  }
 
-  if (!moduleId || !MODULES[moduleId]) {
+  if (!moduleId) {
     document.getElementById('title').textContent = 'Модуль не найден.';
     return;
   }
 
+  // 1. ЗАПРАШИВАЕМ ПАРОЛЬ
+  await requireAuth(moduleId);
+
+  // 2. НАСТРАИВАЕМ СТРАНИЦУ
   const mod = MODULES[moduleId];
   document.getElementById('title').innerHTML = `<span class="num">Модуль № ${moduleId}.</span> «${mod.name}»`;
   document.title = `Модуль № ${moduleId}. ${mod.name}`;
@@ -16,131 +26,127 @@
       await new Promise(r => setTimeout(r, 50));
     }
   }
+  await waitForStore();
 
-  async function initModule() {
-    await waitForStore();
-    
-    let scoredData = {};
-    async function updateScoredData() {
-      const all = await loadAllScores();
-      scoredData = all[moduleId] || {};
-    }
+  const deviceLockKey = `device_evaluated_mod_${moduleId}`;
+  const container = document.getElementById('cards');
 
-    const container = document.getElementById('cards');
-    container.innerHTML = '';
-
-    async function renderInterface() {
-      await updateScoredData();
-      container.innerHTML = '';
-
-      const scoredCount = Object.keys(scoredData).length;
-      
-      // 1. БЛОК ВВОДА
-      if (scoredCount < 19) {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <div class="step-info">Оценено ${scoredCount} из 19</div>
-          
-          <label style="font-size:13px; color:var(--muted); margin-bottom:4px; display:block;">Номер участника (только цифры):</label>
-          <input type="text" id="codeInput" placeholder="Например: 5" autocomplete="off" inputmode="numeric" style="margin-bottom:12px;">
-          
-          <label style="font-size:13px; color:var(--muted); margin-bottom:4px; display:block;">Количество баллов (0–100):</label>
-          <input type="number" id="scoreInput" min="0" max="100" step="0.01" placeholder="0–100" inputmode="decimal">
-          
-          <div class="err" id="errMsg"></div>
-          <button class="btn" id="submitBtn" type="button">Оценить участника</button>
-        `;
-        
-        const codeInput = card.querySelector('#codeInput');
-        const scoreInput = card.querySelector('#scoreInput');
-        const err = card.querySelector('#errMsg');
-        const btn = card.querySelector('#submitBtn');
-
-        btn.addEventListener('click', async () => {
-          err.textContent = '';
-          
-          // Очищаем ввод от всего, кроме цифр
-          let rawCode = codeInput.value.trim().replace(/[^0-9]/g, '');
-          
-          if (!rawCode) {
-            err.textContent = 'Введите номер участника.';
-            return;
-          }
-
-          // Превращаем "5" в "У-05", "15" в "У-15"
-          let code = 'У-' + rawCode.padStart(2, '0');
-
-          if (!ALL_PARTICIPANTS.includes(code)) {
-            err.textContent = 'Неверный номер. Доступны номера от 1 до 19.';
-            return;
-          }
-
-          if (scoredData[code] !== undefined) {
-            err.textContent = `Участник ${code} уже оценен (${scoredData[code]} б.).`;
-            return;
-          }
-
-          const rawScore = scoreInput.value.trim().replace(',', '.');
-          const val = Number(rawScore);
-
-          if (rawScore === '' || Number.isNaN(val) || val < 0 || val > 100) {
-            err.textContent = 'Введите число от 0 до 100.';
-            return;
-          }
-
-          btn.disabled = true;
-          btn.textContent = 'Сохранение...';
-
-          try {
-            await saveScore(moduleId, code, val);
-            await renderInterface(); // Перерисовываем
-          } catch (e) {
-            err.textContent = 'Ошибка сохранения. Повторите.';
-            btn.disabled = false;
-            btn.textContent = 'Оценить участника';
-          }
-        });
-
-        container.appendChild(card);
-      } else {
-        container.innerHTML = `<div class="hint" style="text-align:center; color:var(--emerald-600); font-weight:bold; margin-bottom:20px;">Все 19 участников модуля оценены!</div>`;
-      }
-
-      // 2. БЛОК РЕЙТИНГА МОДУЛЯ
-      if (scoredCount > 0) {
-        const rankingBox = document.createElement('div');
-        rankingBox.className = 'queue-preview'; 
-        
-        const ranking = Object.entries(scoredData)
-          .map(([code, score]) => ({ code, score }))
-          .sort((a, b) => b.score - a.score || a.code.localeCompare(b.code));
-
-        const listHtml = ranking.map((item, index) => {
-          let medal = '';
-          if (index === 0) medal = '🥇 ';
-          else if (index === 1) medal = '🥈 ';
-          else if (index === 2) medal = '🥉 ';
-          
-          return `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--emerald-100); font-size:14px;">
-            <span>${medal}<strong>${item.code}</strong></span>
-            <span style="font-weight:bold; color:var(--emerald-700);">${item.score} б.</span>
-          </div>`;
-        }).join('');
-
-        rankingBox.innerHTML = `
-          <h3 style="text-align:center; margin-bottom:12px;">Текущий рейтинг модуля</h3>
-          <div style="max-height: 300px; overflow-y: auto;">
-            ${listHtml}
-          </div>
-        `;
-        
-        container.appendChild(rankingBox);
-      }
-    }
-
-    renderInterface();
+  // 3. ПРОВЕРКА ОДНОРАЗОВОСТИ УСТРОЙСТВА
+  if (localStorage.getItem(deviceLockKey)) {
+    container.innerHTML = `
+      <div class="block-screen">
+        <h2>Доступ заблокирован</h2>
+        <p>С этого устройства <strong>уже были отправлены оценки</strong> для этого модуля.</p>
+        <p>Повторное оценивание запрещено правилами.</p>
+      </div>
+    `;
+    return;
   }
 
-  initModule();
+  let scoredData = {};
+  async function updateScoredData() {
+    const all = await loadAllScores();
+    scoredData = all[moduleId] || {};
+  }
+
+  container.innerHTML = '';
+
+  async function renderInterface() {
+    await updateScoredData();
+    container.innerHTML = '';
+
+    const scoredCount = Object.keys(scoredData).length;
+    
+    // БЛОК ВВОДА
+    if (scoredCount < 19) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="step-info">Оценено ${scoredCount} из 19</div>
+        
+        <label style="font-size:13px; color:var(--muted); margin-bottom:4px; display:block;">Номер участника (только цифры):</label>
+        <input type="text" id="codeInput" placeholder="Например: 5" autocomplete="off" inputmode="numeric" style="margin-bottom:12px;">
+        
+        <label style="font-size:13px; color:var(--muted); margin-bottom:4px; display:block;">Количество баллов (0–100):</label>
+        <input type="number" id="scoreInput" min="0" max="100" step="0.01" placeholder="0–100" inputmode="decimal">
+        
+        <div class="err" id="errMsg"></div>
+        <button class="btn" id="submitBtn" type="button">Оценить участника</button>
+      `;
+      
+      const codeInput = card.querySelector('#codeInput');
+      const scoreInput = card.querySelector('#scoreInput');
+      const err = card.querySelector('#errMsg');
+      const btn = card.querySelector('#submitBtn');
+
+      btn.addEventListener('click', async () => {
+        err.textContent = '';
+        let rawCode = codeInput.value.trim().replace(/[^0-9]/g, '');
+        
+        if (!rawCode) { err.textContent = 'Введите номер участника.'; return; }
+        let code = 'У-' + rawCode.padStart(2, '0');
+
+        if (!ALL_PARTICIPANTS.includes(code)) {
+          err.textContent = 'Неверный номер. Доступны номера от 1 до 19.'; return;
+        }
+        if (scoredData[code] !== undefined) {
+          err.textContent = `Участник ${code} уже оценен (${scoredData[code]} б.).`; return;
+        }
+
+        const rawScore = scoreInput.value.trim().replace(',', '.');
+        const val = Number(rawScore);
+        if (rawScore === '' || Number.isNaN(val) || val < 0 || val > 100) {
+          err.textContent = 'Введите число от 0 до 100.'; return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Сохранение...';
+
+        try {
+          // СОХРАНЯЕМ В FIREBASE
+          await saveScore(moduleId, code, val);
+          
+          // СТАВИМ БЛОКИРОВКУ НА УСТРОЙСТВО
+          localStorage.setItem(deviceLockKey, 'true');
+
+          // ПЕРЕРИСОВЫВАЕМ (покажет экран "Доступ заблокирован")
+          renderInterface(); 
+        } catch (e) {
+          err.textContent = 'Ошибка сохранения. Повторите.';
+          btn.disabled = false;
+          btn.textContent = 'Оценить участника';
+        }
+      });
+
+      container.appendChild(card);
+    } else {
+      container.innerHTML = `<div class="hint" style="text-align:center; color:var(--emerald-600); font-weight:bold; margin-bottom:20px;">Все 19 участников модуля оценены!</div>`;
+    }
+
+    // БЛОК РЕЙТИНГА
+    if (scoredCount > 0) {
+      const rankingBox = document.createElement('div');
+      rankingBox.className = 'queue-preview'; 
+      
+      const ranking = Object.entries(scoredData)
+        .map(([code, score]) => ({ code, score }))
+        .sort((a, b) => b.score - a.score || a.code.localeCompare(b.code));
+
+      const listHtml = ranking.map((item, index) => {
+        let medal = index === 0 ? '🥇 ' : index === 1 ? '🥈 ' : index === 2 ? '🥉 ' : '';
+        return `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--emerald-100); font-size:14px;">
+          <span>${medal}<strong>${item.code}</strong></span>
+          <span style="font-weight:bold; color:var(--emerald-700);">${item.score} б.</span>
+        </div>`;
+      }).join('');
+
+      rankingBox.innerHTML = `
+        <h3 style="text-align:center; margin-bottom:12px;">Текущий рейтинг модуля</h3>
+        <div style="max-height: 300px; overflow-y: auto;">${listHtml}</div>
+      `;
+      container.appendChild(rankingBox);
+    }
+  }
+
+  renderInterface();
 })();
