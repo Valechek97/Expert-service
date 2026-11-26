@@ -437,3 +437,74 @@ tr.bronze td:first-child::before { content: "🥉 "; }
   background: #ffffff;
   box-shadow: 0 0 0 2px var(--emerald-100);
 }
+
+/* Экран блокировки (Пароль) */
+.auth-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+.auth-box {
+  background: #ffffff;
+  border: 2px solid var(--emerald-500);
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(4, 120, 87, 0.1);
+}
+.auth-box h2 {
+  color: var(--emerald-900);
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+.auth-box p {
+  color: var(--emerald-700);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.auth-box input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--emerald-100);
+  border-radius: 10px;
+  font-size: 18px;
+  text-align: center;
+  outline: none;
+  background: var(--emerald-50);
+  margin-bottom: 12px;
+}
+.auth-box input:focus {
+  border-color: var(--emerald-500);
+  background: #ffffff;
+}
+.auth-err {
+  color: var(--danger);
+  font-size: 13px;
+  min-height: 18px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* Экран "Доступ запрещен" */
+.block-screen {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--emerald-50);
+  border: 2px solid var(--emerald-500);
+  border-radius: 16px;
+  color: var(--emerald-900);
+  margin-top: 20px;
+}
+.block-screen h2 {
+  color: #dc2626;
+  margin-top: 0;
+}
