@@ -1,4 +1,7 @@
-(function(){
+(async function(){
+  // 1. ЗАПРАШИВАЕМ ПАРОЛЬ ГЛАВНОГО ЭКСПЕРТА
+  await requireAuth('master');
+
   const BONUS_VALUES = [100,90,80,70,60,50,40,30,20,10];
   const BONUS_LS_KEY = 'competition_bonus_v1';
 
